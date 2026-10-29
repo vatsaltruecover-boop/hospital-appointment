@@ -92,7 +92,7 @@ function renderDoctorProfile() {
   if (profileSpecialty) profileSpecialty.textContent = clinic.specialty;
   if (activeClinicDisplay) activeClinicDisplay.textContent = clinic.name;
   if (endpointTag) endpointTag.textContent = `/${clinic.slug}`;
-  if (btnOpenTv) btnOpenTv.href = `/${clinic.slug}/tv`;
+  if (btnOpenTv) btnOpenTv.href = `/live-tv.html?clinic=${clinic.slug}`;
 }
 
 function renderCurrentPanel() {

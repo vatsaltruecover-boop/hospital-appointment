@@ -245,7 +245,7 @@ function renderClinicsGrid(filterQuery = '') {
       const clinic = clinicStore.getClinicBySlugOrId(cId);
       if (clinic) {
         clinicStore.setCurrentClinic(clinic.id);
-        window.open(`/${clinic.slug}/doctor`, '_blank');
+        window.open(`/doctor.html?clinic=${clinic.slug}`, '_blank');
       }
     };
   });
@@ -452,7 +452,7 @@ function openShareModal(clinic) {
   // Launch console button
   const launchBtn = document.getElementById('btn-launch-doctor-console');
   if (launchBtn) {
-    launchBtn.href = `/${clinic.slug}/doctor`;
+    launchBtn.href = `/doctor.html?clinic=${clinic.slug}`;
     launchBtn.onclick = () => {
       // Auto switch clinic context
       clinicStore.setCurrentClinic(clinic.id);

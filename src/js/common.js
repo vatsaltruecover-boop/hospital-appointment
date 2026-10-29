@@ -53,41 +53,10 @@ export function resolveClinicFromUrl() {
   return clinicStore.getCurrentClinic();
 }
 
-// Automatically strip .html and legacy query params to maintain modern clean URLs in address bar
+// Automatically normalize address bar without breaking static hosting routers
 export function normalizeAddressBar(activePage = 'patient', clinic = null) {
-  if (typeof window === 'undefined' || !window.history || !window.history.replaceState) return;
-  const currentPath = window.location.pathname || '';
-  const currentSearch = window.location.search || '';
-
-  const hasHtml = currentPath.endsWith('.html');
-  const hasClinicQuery = currentSearch.includes('clinic=') || currentSearch.includes('clinicId=');
-
-  if (!hasHtml && !hasClinicQuery) return;
-
-  const targetClinic = clinic || resolveClinicFromUrl();
-  const slug = targetClinic ? (targetClinic.slug || targetClinic.id) : 'joshi-clinic';
-
-  let cleanPath = `/${slug}`;
-  if (activePage === 'doctor' || currentPath.includes('doctor')) {
-    cleanPath = `/${slug}/doctor`;
-  } else if (activePage === 'tv' || currentPath.includes('live-tv') || currentPath.includes('tv')) {
-    cleanPath = `/${slug}/tv`;
-  } else if (activePage === 'admin' || currentPath.includes('admin')) {
-    cleanPath = '/admin';
-  }
-
-  // Preserve non-clinic search params (e.g. ?myToken=12)
-  const params = new URLSearchParams(currentSearch);
-  params.delete('clinic');
-  params.delete('c');
-  params.delete('clinicId');
-  const remainingQuery = params.toString() ? `?${params.toString()}` : '';
-
-  try {
-    window.history.replaceState({}, '', `${cleanPath}${remainingQuery}`);
-  } catch (err) {
-    // Non-browser / mock sandbox fallback
-  }
+  // Keep standard HTML query routing for 100% static hosting compatibility (Vercel, Netlify, etc.)
+  return;
 }
 
 export function renderSharedHeader(activePage = 'patient') {
@@ -118,7 +87,7 @@ export function renderSharedHeader(activePage = 'patient') {
       <div class="header-container">
         <!-- Brand & Clinic Context (Horizontally Oriented) -->
         <div class="brand-section">
-          <a href="/${clinicSlug}" class="brand-link" title="${currentClinic.name}">
+          <a href="/index.html?clinic=${clinicSlug}" class="brand-link" title="${currentClinic.name}">
             <div class="brand-logo-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
@@ -146,23 +115,23 @@ export function renderSharedHeader(activePage = 'patient') {
           </a>
         </div>
 
-        <!-- 4-Screen Navigation (Clean Vanity URLs) -->
+        <!-- 4-Screen Navigation (Direct HTML Routing for Static Hosting) -->
         <nav class="screen-switcher-nav" aria-label="Screen Switcher">
-          <a href="/${clinicSlug}" class="nav-pill-btn ${activePage === 'patient' ? 'active' : ''}" title="Public Patient Booking Screen">
+          <a href="/index.html?clinic=${clinicSlug}" class="nav-pill-btn ${activePage === 'patient' ? 'active' : ''}" title="Public Patient Booking Screen">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
             <span>Patient</span>
           </a>
-          <a href="/${clinicSlug}/tv" class="nav-pill-btn ${activePage === 'tv' ? 'active' : ''}" title="Waiting Room Live TV Monitor">
+          <a href="/live-tv.html?clinic=${clinicSlug}" class="nav-pill-btn ${activePage === 'tv' ? 'active' : ''}" title="Waiting Room Live TV Monitor">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect width="20" height="15" x="2" y="3" rx="2"/>
               <polyline points="17 2 12 7 7 2"/>
             </svg>
             <span>Live TV</span>
           </a>
-          <a href="/${clinicSlug}/doctor" class="nav-pill-btn ${activePage === 'doctor' ? 'active' : ''}" title="Doctor Queue Advancement Console">
+          <a href="/doctor.html?clinic=${clinicSlug}" class="nav-pill-btn ${activePage === 'doctor' ? 'active' : ''}" title="Doctor Queue Advancement Console">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
               <circle cx="9" cy="7" r="4"/>
@@ -171,7 +140,7 @@ export function renderSharedHeader(activePage = 'patient') {
             </svg>
             <span>Doctor Console</span>
           </a>
-          <a href="/admin" class="nav-pill-btn nav-pill-admin ${activePage === 'admin' ? 'active' : ''}" title="Super Admin Multi-Clinic Management">
+          <a href="/admin.html" class="nav-pill-btn nav-pill-admin ${activePage === 'admin' ? 'active' : ''}" title="Super Admin Multi-Clinic Management">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
@@ -233,7 +202,7 @@ export function renderSharedHeader(activePage = 'patient') {
                 <path d="m6 9 6 6 6-6"/>
               </svg>
             </div>
-            <a href="/admin" class="btn btn-sm btn-secondary" style="font-size:0.775rem;">Admin Login</a>
+            <a href="/admin.html" class="btn btn-sm btn-secondary" style="font-size:0.775rem;">Admin Login</a>
           `}
         </div>
       </div>
@@ -248,8 +217,13 @@ export function renderSharedHeader(activePage = 'patient') {
       const target = clinicStore.getClinicBySlugOrId(newClinicId);
       if (target) {
         clinicStore.setCurrentClinic(target.id);
-        // Clean vanity path switch
-        window.location.href = `/${target.slug}`;
+        if (activePage === 'doctor') {
+          window.location.href = `/doctor.html?clinic=${target.slug}`;
+        } else if (activePage === 'tv') {
+          window.location.href = `/live-tv.html?clinic=${target.slug}`;
+        } else {
+          window.location.href = `/index.html?clinic=${target.slug}`;
+        }
       }
     });
   }

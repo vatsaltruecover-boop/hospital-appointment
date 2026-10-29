@@ -232,13 +232,13 @@ function showVoucherModal(appointment) {
     if (countdownEl) countdownEl.textContent = `Redirecting to Live TV Screen in ${countdownSecs} seconds...`;
     if (countdownSecs <= 0) {
       clearInterval(redirectTimer);
-      window.location.href = `/${clinic.slug}/tv?myToken=${appointment.tokenNumber}`;
+      window.location.href = `/live-tv.html?clinic=${clinic.slug}&myToken=${appointment.tokenNumber}`;
     }
   }, 1000);
 
   goToTvBtn.onclick = () => {
     if (redirectTimer) clearInterval(redirectTimer);
-    window.location.href = `/${clinic.slug}/tv?myToken=${appointment.tokenNumber}`;
+    window.location.href = `/live-tv.html?clinic=${clinic.slug}&myToken=${appointment.tokenNumber}`;
   };
 
   stayBtn.onclick = () => {
