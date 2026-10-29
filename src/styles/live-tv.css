@@ -1,0 +1,494 @@
+/* Screen 2: Live TV Waiting Room Display Styles */
+@import './base.css';
+
+body.tv-body {
+  background-color: var(--tv-bg);
+  color: var(--tv-text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* TV Header Bar */
+.tv-header {
+  background: var(--tv-bg-surface);
+  border-bottom: 1px solid var(--tv-border);
+  padding: 0.85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tv-clinic-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tv-logo-symbol {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #0d9488 0%, #2dd4bf 100%);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.4);
+}
+
+.tv-clinic-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.01em;
+}
+
+.tv-clinic-room {
+  font-size: 0.85rem;
+  color: var(--tv-text-secondary);
+}
+
+.tv-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tv-live-clock {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-md);
+  letter-spacing: 0.05em;
+}
+
+.tv-btn-action {
+  background: var(--tv-bg-card);
+  border: 1px solid var(--tv-border);
+  color: white;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.tv-btn-action:hover {
+  background: var(--tv-bg-highlight);
+  border-color: #475569;
+}
+
+.tv-btn-action.active-sound {
+  background: rgba(45, 212, 191, 0.15);
+  border-color: var(--tv-accent);
+  color: var(--tv-accent);
+}
+
+/* User Token Notification Banner (If patient redirected from booking) */
+.user-token-callout {
+  background: linear-gradient(90deg, rgba(13, 148, 136, 0.25) 0%, rgba(37, 99, 235, 0.2) 100%);
+  border-bottom: 1px solid rgba(45, 212, 191, 0.35);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.callout-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.callout-badge {
+  background: var(--tv-accent);
+  color: #0f172a;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+}
+
+/* TV Main Content Area */
+.tv-main-stage {
+  flex: 1;
+  padding: 1.75rem 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* Hero Section: Currently Serving */
+.tv-grid-hero {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2rem;
+}
+
+.tv-now-serving-card {
+  background: linear-gradient(145deg, #101c33 0%, #172847 100%);
+  border: 2px solid #233659;
+  border-radius: var(--radius-xl);
+  padding: 2.25rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 45px rgba(45, 212, 191, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.tv-now-serving-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #10b981, #2dd4bf, #38bdf8);
+  box-shadow: 0 0 20px #2dd4bf;
+}
+
+.card-top-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.consulting-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tv-session-pill {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.serving-number-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
+.serving-label {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.serving-big-number {
+  font-family: var(--font-mono);
+  font-size: clamp(5.5rem, 12vw, 9.5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  color: #ffffff;
+  text-shadow: 0 0 35px rgba(255, 255, 255, 0.4), 0 0 60px rgba(45, 212, 191, 0.35);
+  letter-spacing: -0.02em;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.serving-big-number.animate-pulse {
+  animation: numberPulse 0.6s ease-in-out;
+}
+
+@keyframes numberPulse {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.serving-patient-destination {
+  margin-top: 1.5rem;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.destination-room-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.destination-room-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.destination-doctor-name {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.destination-time-elapsed {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+/* Side Column: Session Overview & Statistics */
+.tv-side-status {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tv-stat-card {
+  background: var(--tv-bg-surface);
+  border: 1px solid var(--tv-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.tv-stat-header {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tv-text-secondary);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tv-stat-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: white;
+}
+
+.tv-stat-sub {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+}
+
+/* Next Patients in Queue Section */
+.tv-queue-board {
+  background: var(--tv-bg-surface);
+  border: 1px solid var(--tv-border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.tv-board-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.tv-board-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tv-queue-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  max-height: 285px; /* Displays ~6 upcoming token cards; scrollable for more */
+  overflow-y: auto;
+  padding-right: 0.35rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--tv-border) transparent;
+}
+
+.tv-queue-cards-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tv-queue-cards-grid::-webkit-scrollbar-track {
+  background: var(--tv-bg-surface);
+  border-radius: 4px;
+}
+
+.tv-queue-cards-grid::-webkit-scrollbar-thumb {
+  background: var(--tv-border);
+  border-radius: 4px;
+}
+
+.tv-queue-cards-grid::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+.tv-queue-item-card {
+  background: var(--tv-bg-card);
+  border: 1px solid var(--tv-border);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.tv-queue-item-card.is-next {
+  border-color: #38bdf8;
+  background: linear-gradient(145deg, #182844 0%, #1e3357 100%);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+.tv-queue-item-card.is-next::before {
+  content: 'NEXT UP';
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #38bdf8;
+  color: #0f172a;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.15rem 0.6rem;
+  border-bottom-left-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+}
+
+.tv-queue-item-card.is-user {
+  border-color: var(--tv-accent);
+  box-shadow: 0 0 25px rgba(45, 212, 191, 0.35);
+}
+
+.queue-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.queue-token-num {
+  font-family: var(--font-mono);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: white;
+}
+
+.queue-status-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+
+.queue-status-pill.waiting {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.queue-patient-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.queue-expected-time {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* TV Bottom Broadcast Ticker */
+.tv-ticker-footer {
+  background: #060a12;
+  border-top: 1px solid var(--tv-border);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.ticker-tag {
+  background: #dc2626;
+  color: white;
+  font-weight: 800;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.ticker-scroll-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsive for TV & Mobile */
+@media (max-width: 900px) {
+  .tv-grid-hero {
+    grid-template-columns: 1fr;
+  }
+  .tv-main-stage {
+    padding: 1rem;
+  }
+  .tv-header {
+    padding: 0.75rem 1rem;
+  }
+}

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinic Administration & Doctor Credential Control | Medipulse OS</title>
+  <meta name="description" content="Super Admin command center for onboarding healthcare clinics, provisioning doctor credentials, configuring vanity endpoints, and overseeing live OPD queues.">
+  <link rel="stylesheet" href="/src/styles/admin.css">
+</head>
+<body class="admin-body">
+  <!-- Shared Top Navigation Header -->
+  <div id="app-shared-header"></div>
+
+  <!-- Super Admin Hero & Controls Banner -->
+  <header class="admin-top-banner">
+    <div class="admin-top-container">
+      <div class="admin-hero-title-group">
+        <div class="admin-shield-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <div>
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <h1>Super Admin Command Center</h1>
+            <span class="admin-master-badge">Full Master Control</span>
+          </div>
+          <p>Onboard clinics, configure unique endpoints, generate doctor credentials, and oversee system queues.</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="admin-hero-actions">
+        <button id="btn-open-create-clinic-modal" class="btn btn-primary btn-onboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>+ Onboard New Clinic & Doctor</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="admin-main-container">
+    <!-- Stat Metrics Row -->
+    <section class="admin-metrics-grid" aria-label="System Metrics">
+      <div class="admin-metric-card">
+        <div class="metric-top">
+          <span class="metric-label">Onboarded Clinics</span>
+          <div class="metric-icon-box" style="background:#e0f2fe; color:#0284c7;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="metric-value" id="metric-total-clinics">2</div>
+        <div class="metric-sub">Dedicated URLs active</div>
+      </div>
+
+      <div class="admin-metric-card">
+        <div class="metric-top">
+          <span class="metric-label">Registered Doctors</span>
+          <div class="metric-icon-box" style="background:#fef3c7; color:#d97706;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="19" y1="8" x2="19" y2="14"/>
+              <line x1="22" y1="11" x2="16" y2="11"/>
+            </svg>
+          </div>
+        </div>
+        <div class="metric-value" id="metric-total-doctors">2</div>
+        <div class="metric-sub">Credentials generated</div>
+      </div>
+
+      <div class="admin-metric-card">
+        <div class="metric-top">
+          <span class="metric-label">Live Active Sessions</span>
+          <div class="metric-icon-box" style="background:#d1fae5; color:#059669;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+        </div>
+        <div class="metric-value" id="metric-active-sessions">2</div>
+        <div class="metric-sub">Real-time OPD running</div>
+      </div>
+
+      <div class="admin-metric-card">
+        <div class="metric-top">
+          <span class="metric-label">Tokens Consulted Today</span>
+          <div class="metric-icon-box" style="background:#ede9fe; color:#7c3aed;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+        </div>
+        <div class="metric-value" id="metric-completed-tokens">9</div>
+        <div class="metric-sub">Across all clinics</div>
+      </div>
+    </section>
+
+    <!-- Clinic Management Section -->
+    <section class="admin-section" aria-labelledby="clinics-management-title">
+      <div class="admin-section-header">
+        <div>
+          <h2 id="clinics-management-title">All Clinic Systems & Dedicated Endpoints</h2>
+          <p>Each clinic has its own endpoint slug, doctor credentials, and dedicated live appointment queue.</p>
+        </div>
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+          <input type="text" id="admin-search-clinics" class="form-input" placeholder="Search clinic or doctor..." style="max-width:240px; font-size:0.85rem; padding:0.45rem 0.75rem;">
+        </div>
+      </div>
+
+      <!-- Clinics Grid Container -->
+      <div class="admin-clinics-grid" id="admin-clinics-container">
+        <!-- Rendered dynamically via admin.js -->
+      </div>
+    </section>
+
+    <!-- System Security & Onboarding Protocol Info Box -->
+    <section class="admin-info-banner">
+      <div class="info-banner-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <div class="info-banner-content">
+        <h3>Super Admin Access Control Protocol</h3>
+        <p>
+          Doctors are strictly restricted to managing queues and sessions within their assigned clinic endpoint. Only Super Admins have permission to onboard new healthcare facilities, assign custom URL slugs, and generate doctor credentials.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: Onboard New Clinic & Generate Doctor Credentials -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modal-onboard-clinic" role="dialog" aria-modal="true" aria-labelledby="onboard-modal-title">
+    <div class="modal-box modal-box-lg">
+      <div class="modal-header">
+        <div>
+          <h2 id="onboard-modal-title" class="modal-title">Onboard New Clinic & Generate Doctor Creds</h2>
+          <p style="font-size:0.825rem; color:var(--color-text-muted); margin-top:0.2rem;">
+            Create a unique endpoint and generate credentials to share with the doctor.
+          </p>
+        </div>
+        <button id="modal-onboard-close" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="onboard-clinic-form" class="modal-form-scrollable" onsubmit="event.preventDefault();">
+        <div class="modal-body">
+          <!-- Step 1: Clinic Identity -->
+          <div class="form-section-label">1. Clinic Information & Endpoint</div>
+          
+          <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="onboard-input-name">Clinic Full Name <span class="required">*</span></label>
+              <input type="text" id="onboard-input-name" class="form-input" placeholder="e.g. Metro Heart & Vascular Clinic" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="onboard-input-slug">Endpoint Slug (URL Path) <span class="required">*</span></label>
+              <input type="text" id="onboard-input-slug" class="form-input" placeholder="e.g. metro-heart" required>
+              <span class="form-hint" id="onboard-slug-preview">Preview: ?clinic=metro-heart</span>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="onboard-input-cabin">Consultation Cabin / Room</label>
+              <input type="text" id="onboard-input-cabin" class="form-input" placeholder="e.g. Cabin 302 (3rd Floor)">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="onboard-input-phone">Clinic Contact Phone</label>
+              <input type="text" id="onboard-input-phone" class="form-input" placeholder="+1 (555) 789-0123">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="onboard-input-address">Clinic Physical Address</label>
+            <input type="text" id="onboard-input-address" class="form-input" placeholder="e.g. 500 Central Ave, Suite 4B">
+          </div>
+
+          <!-- Step 2: Doctor Identity & Auto-generated Credentials -->
+          <div class="form-section-label" style="margin-top: 1.5rem;">2. Doctor Profile & Login Credentials</div>
+
+          <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="onboard-input-doctor">Doctor Name <span class="required">*</span></label>
+              <input type="text" id="onboard-input-doctor" class="form-input" placeholder="e.g. Dr. Arthur Vance, MD" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="onboard-input-specialty">Specialty</label>
+              <input type="text" id="onboard-input-specialty" class="form-input" placeholder="e.g. Cardiology & Hypertension">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="onboard-input-username">Doctor Username / Email <span class="required">*</span></label>
+              <input type="text" id="onboard-input-username" class="form-input" placeholder="e.g. dr.vance@medipulse.io" required>
+            </div>
+
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <label class="form-label" for="onboard-input-password">Password / Access PIN <span class="required">*</span></label>
+                <button type="button" id="btn-regen-password" class="btn-text-regen">🎲 Generate Strong</button>
+              </div>
+              <input type="text" id="onboard-input-password" class="form-input" style="font-family:var(--font-mono); font-weight:700;" required>
+            </div>
+          </div>
+
+          <!-- Step 3: Consultation Pace & Optional Telegram -->
+          <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="onboard-input-avgtime">Avg Consult (Mins)</label>
+              <input type="number" id="onboard-input-avgtime" class="form-input" min="2" max="60" value="8">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="onboard-input-tgtoken">Telegram Bot Token (Optional)</label>
+              <input type="text" id="onboard-input-tgtoken" class="form-input" placeholder="Leave blank to use simulated Telegram">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" id="btn-submit-onboard" class="btn btn-primary btn-lg" style="width: 100%;">
+            🚀 Create Clinic & Generate Doctor Share Card
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: Doctor Credentials & Onboarding Share Card       -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modal-share-creds" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+    <div class="modal-box modal-box-lg" style="max-width: 600px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <div class="share-header-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <polyline points="16 6 12 2 8 6"/>
+              <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <div>
+            <h2 id="share-modal-title" class="modal-title">Doctor Credentials & Onboarding Dossier</h2>
+            <p style="font-size:0.8rem; color:var(--color-text-muted);">Share this onboarding packet with the doctor</p>
+          </div>
+        </div>
+        <button id="modal-share-close" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Credential Card Container -->
+        <div class="credential-share-card" id="credential-share-content">
+          <div class="share-card-header">
+            <div>
+              <div class="share-clinic-tag" id="share-clinic-tag">Apex Health & Specialty</div>
+              <h3 class="share-doctor-title" id="share-doctor-name">Dr. Arthur Vance, MD</h3>
+              <p class="share-doctor-spec" id="share-doctor-spec">Cardiology &bull; Cabin 104</p>
+            </div>
+            <div class="share-verified-badge">
+              <span>Dedicated Endpoint</span>
+              <strong id="share-endpoint-slug">?clinic=apex-health</strong>
+            </div>
+          </div>
+
+          <!-- Credentials Box -->
+          <div class="share-creds-box">
+            <div class="share-cred-field">
+              <span class="share-cred-label">Doctor Username</span>
+              <div class="share-cred-value">
+                <code id="share-val-username">dr.vance@medipulse.io</code>
+              </div>
+            </div>
+
+            <div class="share-cred-field">
+              <span class="share-cred-label">Password / PIN</span>
+              <div class="share-cred-value">
+                <code id="share-val-password">Pulse#7892</code>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dedicated URLs -->
+          <div class="share-links-list">
+            <div class="share-link-item">
+              <span class="link-item-title">🩺 Doctor Console Login:</span>
+              <code id="share-link-doctor" class="share-url-code">http://localhost:3000/joshi-clinic/doctor</code>
+            </div>
+            <div class="share-link-item">
+              <span class="link-item-title">🎫 Patient Booking Portal:</span>
+              <code id="share-link-patient" class="share-url-code">http://localhost:3000/joshi-clinic</code>
+            </div>
+            <div class="share-link-item">
+              <span class="link-item-title">📺 Live TV Waiting Room:</span>
+              <code id="share-link-tv" class="share-url-code">http://localhost:3000/joshi-clinic/tv</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1-Click Sharing Actions -->
+        <div class="share-action-buttons-grid">
+          <button id="btn-copy-share-package" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+            </svg>
+            <span>📋 Copy Complete Dossier</span>
+          </button>
+
+          <a id="btn-share-whatsapp" href="#" target="_blank" class="btn btn-whatsapp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/>
+            </svg>
+            <span>Share to WhatsApp</span>
+          </a>
+
+          <a id="btn-share-email" href="#" class="btn btn-secondary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="20" height="16" x="2" y="4" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            <span>Share via Email</span>
+          </a>
+
+          <a id="btn-launch-doctor-console" href="#" target="_blank" class="btn btn-outline" style="border-color:#6366f1; color:#4f46e5;">
+            <span>🚀 Open Doctor Console &UpperRightArrow;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: Super Admin Login (Shown if not logged in)       -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modal-admin-login" role="dialog" aria-modal="true" aria-labelledby="admin-login-title">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <div>
+          <h2 id="admin-login-title" class="modal-title">Super Admin Sign In</h2>
+          <p style="font-size:0.8rem; color:var(--color-text-muted);">Enter master administrator credentials</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form id="admin-login-form" onsubmit="event.preventDefault();">
+          <div class="form-group">
+            <label class="form-label" for="admin-login-user">Admin Email / Username</label>
+            <input type="text" id="admin-login-user" class="form-input" value="admin@medipulse.io" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="admin-login-pass">Password</label>
+            <input type="password" id="admin-login-pass" class="form-input" value="admin123" required>
+          </div>
+
+          <div style="margin-top: 1.25rem;">
+            <button type="submit" id="btn-submit-admin-login" class="btn btn-primary" style="width:100%;">
+              Sign In as Super Admin
+            </button>
+          </div>
+
+          <div style="margin-top: 1.5rem; text-align:center; font-size: 0.8rem; color:var(--color-text-muted);">
+            Default Demo Creds: <strong>admin@medipulse.io</strong> / <strong>admin123</strong>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript bootstrap -->
+  <script type="module">
+    import { initAdminScreen } from '/src/js/admin.js';
+    document.addEventListener('DOMContentLoaded', initAdminScreen);
+  </script>
+</body>
+</html>

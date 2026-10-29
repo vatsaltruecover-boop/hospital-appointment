@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joshi Clinic Surat | Live OPD Waiting Room Digital Display</title>
+  <meta name="description" content="Official waiting room digital signage for Joshi Clinic, Surat. Displays live consulting token, doctor destination, and real-time queue advancement.">
+  <link rel="stylesheet" href="/src/styles/live-tv.css">
+</head>
+<body class="tv-theme tv-body">
+  <!-- Global Shared Navigation Header -->
+  <div id="app-shared-header"></div>
+
+  <!-- Dedicated TV Display Top Bar -->
+  <header class="tv-header" aria-label="TV Display Controls">
+    <div class="tv-clinic-brand">
+      <div class="tv-logo-symbol" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          <path d="M12 5v14"/>
+          <path d="M5 12h14"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="tv-clinic-name" id="tv-clinic-name">Joshi Clinic</h1>
+        <div class="tv-clinic-room" id="tv-clinic-room">Cabin 1 (Ground Floor) &bull; Dr. Rajvi J. Joshi</div>
+      </div>
+    </div>
+
+    <div class="tv-controls-group">
+      <!-- Live Clock -->
+      <div class="tv-live-clock" id="tv-clock-display" aria-label="Current Time">
+        00:00:00
+      </div>
+
+      <!-- Sound Announcement Chime Toggle -->
+      <button id="tv-sound-btn" class="tv-btn-action active-sound" title="Toggle Audio Chime">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </svg>
+        <span>Sound: ON</span>
+      </button>
+
+      <!-- TV Fullscreen Toggle -->
+      <button id="tv-fullscreen-btn" class="tv-btn-action" title="Full Screen TV Mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+        <span>TV Mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- User Token Callout Banner (If redirected from patient booking) -->
+  <aside id="user-token-callout" class="user-token-callout" style="display: none;" aria-live="polite">
+    <div class="callout-info">
+      <span class="callout-badge" id="callout-user-token">TOKEN #--</span>
+      <span id="callout-status-desc" style="color: white; font-weight: 600;">Calculating your queue wait time...</span>
+    </div>
+    <div style="font-size: 0.8rem; color: #94a3b8;">
+      🔊 Audible chime will announce when your token is called.
+    </div>
+  </aside>
+
+  <!-- TV Stage Main Grid -->
+  <main class="tv-main-stage">
+    <!-- Hero Row: Now Serving Token & Session Overview -->
+    <div class="tv-grid-hero">
+      <!-- Huge Center Token Card -->
+      <section class="tv-now-serving-card" aria-label="Currently Serving Patient">
+        <div class="card-top-status">
+          <div class="consulting-live-pill">
+            <span class="pulse-dot animated" style="background:#10b981;"></span>
+            <span>Now Consulting</span>
+          </div>
+          <div class="tv-session-pill">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span id="tv-active-session-timing">09:00 AM - 12:00 PM</span>
+          </div>
+        </div>
+
+        <div class="serving-number-area">
+          <div class="serving-label">Current Token Number</div>
+          <div class="serving-big-number" id="tv-big-token">07</div>
+        </div>
+
+        <!-- Destination Cabin & Doctor -->
+        <div class="serving-patient-destination">
+          <div class="destination-room-info">
+            <span style="font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.05em;">Proceed to</span>
+            <div class="destination-room-name" id="tv-room-destination">Cabin 104 (First Floor)</div>
+            <div class="destination-doctor-name" id="tv-doctor-destination">Dr. Robert Vance, MD</div>
+          </div>
+          <div class="destination-time-elapsed">
+            <span class="pulse-dot" style="background:#38bdf8;"></span>
+            <span>In Consultation</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Side Column: Active Session & Clinic Stats -->
+      <section class="tv-side-status" aria-label="Queue Statistics">
+        <!-- Active Session Card -->
+        <div class="tv-stat-card">
+          <div class="tv-stat-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>Current Running Session</span>
+          </div>
+          <div class="tv-stat-value" id="tv-active-session-title">Morning General OPD</div>
+          <div class="tv-stat-sub">Strict 7 tokens/hour quota for patient convenience</div>
+        </div>
+
+        <!-- Completed Patients -->
+        <div class="tv-stat-card">
+          <div class="tv-stat-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span>Consultations Completed Today</span>
+          </div>
+          <div class="tv-stat-value" id="tv-completed-count" style="color: #34d399;">6 Patients</div>
+          <div class="tv-stat-sub">On-schedule consultation pace</div>
+        </div>
+
+        <!-- Waiting Patients -->
+        <div class="tv-stat-card">
+          <div class="tv-stat-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            <span>Patients Waiting in Lounge</span>
+          </div>
+          <div class="tv-stat-value" id="tv-remaining-count" style="color: #38bdf8;">5 Waiting</div>
+          <div class="tv-stat-sub">Estimated avg consult: <span id="tv-avg-wait">~8 mins</span></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Next In Line / Queue Board -->
+    <section class="tv-queue-board" aria-labelledby="queue-board-title">
+      <div class="tv-board-title-row">
+        <h2 id="queue-board-title" class="tv-board-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: #38bdf8;">
+            <line x1="8" y1="6" x2="21" y2="6"/>
+            <line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+          <span>Next Patients In Line</span>
+        </h2>
+        <div style="font-size: 0.85rem; color: var(--tv-text-secondary);">
+          Patients please proceed to the waiting lounge near Cabin 104
+        </div>
+      </div>
+
+      <!-- Grid of upcoming tokens -->
+      <div class="tv-queue-cards-grid" id="tv-next-queue-grid">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Live Notice Ticker Footer -->
+  <footer class="tv-ticker-footer" aria-label="Announcement Notice">
+    <span class="ticker-tag">ANNOUNCEMENT</span>
+    <div class="ticker-scroll-text" id="tv-ticker-message">
+      Please present your photo ID and previous prescription slips at the reception counter. If your token number has passed, please notify the nurse station immediately.
+    </div>
+  </footer>
+
+  <!-- Main JavaScript bootstrap -->
+  <script type="module">
+    import { initLiveTVScreen } from '/src/js/live-tv.js';
+    document.addEventListener('DOMContentLoaded', initLiveTVScreen);
+  </script>
+</body>
+</html>

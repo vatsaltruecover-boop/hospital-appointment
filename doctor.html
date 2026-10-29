@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dr. Rajvi J. Joshi | Consultation & Queue Console - Joshi Clinic, Surat</title>
+  <meta name="description" content="Official clinician console for Dr. Rajvi J. Joshi at Joshi Clinic, Surat. Live queue calling, consultation pacing, and hourly token allocation.">
+  <link rel="stylesheet" href="/src/styles/doctor.css">
+</head>
+<body>
+  <!-- Global Shared Navigation Header -->
+  <div id="app-shared-header"></div>
+
+  <!-- Super Admin Inspection Banner (Shown only when Super Admin is viewing doctor console) -->
+  <div id="super-admin-banner" style="display:none; background: linear-gradient(90deg, #1e1b4b 0%, #312e81 100%); color: white; padding: 0.65rem 1.5rem; border-bottom: 1px solid #4338ca; font-size: 0.85rem; align-items: center; justify-content: space-between;">
+    <div style="display:flex; align-items:center; gap:0.6rem;">
+      <span style="background:#4f46e5; padding:0.2rem 0.5rem; border-radius:4px; font-weight:700; font-size:0.75rem; text-transform:uppercase;">Super Admin Mode</span>
+      <span id="super-admin-banner-text">Viewing Doctor Console for <strong>MediPulse Health Clinic</strong></span>
+    </div>
+    <div style="display:flex; gap:0.75rem; align-items:center;">
+      <a href="/admin" class="btn btn-sm btn-primary" style="font-size:0.78rem; padding:0.25rem 0.65rem; background:#6366f1; border-color:#818cf8;">
+        &larr; Return to Super Admin Portal
+      </a>
+    </div>
+  </div>
+
+  <!-- Doctor Console Multi-Panel Layout -->
+  <div class="doctor-app-layout">
+    <!-- Left Sidebar (Panel Navigation) -->
+    <aside class="doctor-sidebar" aria-label="Staff Console Navigation">
+      <div>
+        <!-- Doctor Profile Badge -->
+        <div class="sidebar-header">
+          <div class="doctor-profile-badge">
+            <div class="doctor-avatar">Dr</div>
+            <div class="doctor-details">
+              <h2 id="doctor-profile-name" style="font-size: 0.95rem;">Dr. Robert Vance, MD</h2>
+              <p id="doctor-profile-specialty">Chief Consultant</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Navigation Items -->
+        <nav class="sidebar-nav-menu" aria-label="Console Panels">
+          <!-- Panel 1: Live-TV Queue Controller -->
+          <button class="sidebar-nav-item active" data-panel="live-tv">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="20" height="15" x="2" y="3" rx="2"/>
+              <polyline points="17 2 12 7 7 2"/>
+            </svg>
+            <span>Live Queue Controller</span>
+          </button>
+
+          <!-- Panel 2: Sessions Management -->
+          <button class="sidebar-nav-item" data-panel="sessions">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>Sessions (Tokens/Hr)</span>
+          </button>
+
+          <!-- Panel 3: My Clinic & Notification Settings (Doctor CANNOT add clinics) -->
+          <button class="sidebar-nav-item" data-panel="clinic-settings">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>My Clinic Settings</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Sidebar Footer (Locked Clinic Badge) -->
+      <div class="sidebar-footer">
+        <div class="active-clinic-pill">
+          <div>
+            <div style="font-size:0.7rem; color:var(--color-text-muted); text-transform:uppercase;">Assigned Clinic</div>
+            <strong id="sidebar-active-clinic">MediPulse Health Clinic</strong>
+            <div id="sidebar-endpoint-tag" style="font-size:0.75rem; font-family:var(--font-mono); color:var(--color-primary); margin-top:0.15rem;">?clinic=medipulse</div>
+          </div>
+          <span class="pulse-dot animated" style="background:#10b981;"></span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right Main Content Area -->
+    <main class="doctor-main-content">
+      <!-- ============================================== -->
+      <!-- PANEL 1: LIVE-TV / QUEUE CONTROLLER SECTION   -->
+      <!-- ============================================== -->
+      <section id="panel-live-tv" class="panel-section active" aria-labelledby="live-controller-title">
+        <div class="panel-header-row">
+          <div>
+            <h1 id="live-controller-title">Live Queue Controller</h1>
+            <p id="doc-active-session-label">Manage active patient consultation tokens in real-time</p>
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button id="btn-add-walkin" class="btn btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>+ Add Walk-in Patient</span>
+            </button>
+            <a id="btn-open-tv-link" href="/joshi-clinic/tv" target="_blank" class="btn btn-outline">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="20" height="15" x="2" y="3" rx="2"/>
+                <polyline points="17 2 12 7 7 2"/>
+              </svg>
+              <span>Open TV Display &UpperRightArrow;</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="live-controller-grid">
+          <!-- Token Advancement Actions Box -->
+          <div class="live-control-card">
+            <div class="live-now-box">
+              <div class="live-now-box-label">Now Serving Token</div>
+              <div class="live-now-number" id="doc-now-serving-num">07</div>
+              <div class="live-patient-now-info" id="doc-now-patient-name">Alexander Hayes</div>
+              <div class="live-patient-phone" id="doc-now-patient-phone">+1 555-101-7777</div>
+            </div>
+
+            <!-- Controller Action Buttons -->
+            <div class="controller-action-buttons">
+              <!-- Primary Next Button -->
+              <button id="btn-call-next" class="controller-btn-next">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polygon points="5 4 15 12 5 20 5 4"/>
+                  <line x1="19" y1="5" x2="19" y2="19"/>
+                </svg>
+                <span>Call Next Token</span>
+              </button>
+
+              <div class="action-sub-grid">
+                <!-- Re-announce / Audio Chime -->
+                <button id="btn-recall" class="btn btn-secondary" title="Play Chime & announce again on Live TV">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
+                  <span>Ring Chime</span>
+                </button>
+
+                <!-- Mark as Completed -->
+                <button id="btn-complete" class="btn btn-secondary" title="Mark patient as completed">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span>Done / Finish</span>
+                </button>
+              </div>
+
+              <div class="action-sub-grid">
+                <!-- Previous Token -->
+                <button id="btn-prev" class="btn btn-secondary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="19" x2="5" y2="5"/>
+                    <polygon points="19 20 9 12 19 4 19 20"/>
+                  </svg>
+                  <span>Previous</span>
+                </button>
+
+                <!-- Skip / No-show -->
+                <button id="btn-skip" class="btn btn-outline" style="border-color: #fca5a5; color: #dc2626;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                  </svg>
+                  <span>No-Show / Skip</span>
+                </button>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.25rem; font-size: 0.775rem; color: var(--color-text-muted); background: var(--color-bg-subtle); padding: 0.65rem 0.85rem; border-radius: var(--radius-md); text-align: center;">
+              ⚡ All actions sync immediately with Screen 1 and the Waiting Room Live TV Screen.
+            </div>
+          </div>
+
+          <!-- Real-time Patient Queue Table -->
+          <div class="queue-table-card">
+            <div class="queue-table-header-bar">
+              <div>
+                <h2 style="font-size: 1.15rem; font-weight: 700;">Patient Queue for this Session</h2>
+                <p style="font-size: 0.825rem;">Directly call, complete, or review patients</p>
+              </div>
+              <div id="queue-count-badge" class="queue-count-pill">
+                <span>11 Patients</span> &bull; <span>Scrollable</span>
+              </div>
+            </div>
+
+            <div class="queue-table-wrap">
+              <table class="queue-table" aria-label="Session Patients Queue">
+                <thead>
+                  <tr>
+                    <th>Token</th>
+                    <th>Patient Name</th>
+                    <th>Phone</th>
+                    <th>Booked At</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="doc-queue-table-body">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- PANEL 2: SESSIONS MANAGER SECTION             -->
+      <!-- ============================================== -->
+      <section id="panel-sessions" class="panel-section" aria-labelledby="sessions-manager-title">
+        <div class="panel-header-row">
+          <div>
+            <h1 id="sessions-manager-title">Sessions & Capacity Manager</h1>
+            <p>Configure session durations and tokens-per-hour quotas (e.g. 3 hours = 21 tokens)</p>
+          </div>
+          <button id="btn-open-create-session" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            <span>+ Create New Session</span>
+          </button>
+        </div>
+
+        <!-- Formula Rule Banner -->
+        <div style="background: white; border: 1px solid var(--color-border); border-left: 4px solid var(--color-primary); padding: 1.25rem 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <strong style="color: var(--color-primary-dark); font-size: 0.95rem;">Rule Formulation:</strong>
+            <p style="font-size: 0.85rem; margin-top: 0.2rem;">
+              Total Allotted Tokens = <strong>Duration (Hours)</strong> &times; <strong>Rate (Tokens/Hour)</strong>. E.g., a 3-hour session at 7 tokens/hour provides exactly 21 consultation tokens.
+            </p>
+          </div>
+          <span class="badge" style="background:var(--color-primary-subtle); color:var(--color-primary-dark); font-weight:700; padding:0.4rem 0.8rem; border-radius:var(--radius-md);">
+            Quota Guard Active
+          </span>
+        </div>
+
+        <!-- Sessions Cards Grid -->
+        <div class="session-cards-grid" id="doc-sessions-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- PANEL 3: MY CLINIC SETTINGS (Doctor CANNOT add clinics) -->
+      <!-- ======================================================== -->
+      <section id="panel-clinic-settings" class="panel-section" aria-labelledby="clinic-settings-title">
+        <div class="panel-header-row">
+          <div>
+            <h1 id="clinic-settings-title">My Clinic Information & Settings</h1>
+            <p>View your dedicated clinic endpoint, update cabin details, and configure Telegram notifications.</p>
+          </div>
+        </div>
+
+        <!-- Doctor Restriction Notice Banner -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #6366f1; padding: 1rem 1.25rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" style="flex-shrink:0;">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <div>
+              <strong style="color: #1e1b4b; font-size: 0.9rem;">Clinic Administration Notice:</strong>
+              <p style="font-size: 0.825rem; color: var(--color-text-muted); margin-top: 0.15rem;">
+                New clinics and doctor credential generation are managed strictly by the <strong>Super Administrator</strong>. Doctors cannot add or delete clinics.
+              </p>
+            </div>
+          </div>
+          <a href="/admin" class="btn btn-sm btn-outline" style="border-color:#c7d2fe; color:#4f46e5; font-size:0.8rem; white-space:nowrap;">
+            Super Admin Portal
+          </a>
+        </div>
+
+        <!-- Dedicated Endpoint Share Box -->
+        <div style="background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+            <div>
+              <h2 style="font-size: 1.15rem; font-weight:700;">Your Dedicated Clinic Endpoint</h2>
+              <p style="font-size: 0.85rem; color:var(--color-text-muted);">Share these dedicated URLs with patients and waiting room screens:</p>
+            </div>
+            <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700; padding:0.35rem 0.75rem; border-radius:var(--radius-md); font-family:var(--font-mono); font-size:0.85rem;">
+              Endpoint: <span id="doc-settings-endpoint-slug">medipulse</span>
+            </span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+            <!-- Patient Link -->
+            <div style="background: var(--color-bg-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-light);">
+              <div style="font-size: 0.75rem; text-transform:uppercase; font-weight:700; color:var(--color-text-muted); margin-bottom:0.35rem;">Patient Booking URL</div>
+              <input type="text" id="doc-patient-url-input" class="form-input" readonly style="font-family:var(--font-mono); font-size:0.8rem; background:white; margin-bottom:0.5rem;">
+              <button id="btn-copy-patient-url" class="btn btn-sm btn-secondary" style="width:100%;">
+                📋 Copy Patient Link
+              </button>
+            </div>
+
+            <!-- TV Link -->
+            <div style="background: var(--color-bg-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-light);">
+              <div style="font-size: 0.75rem; text-transform:uppercase; font-weight:700; color:var(--color-text-muted); margin-bottom:0.35rem;">Live TV Waiting Room URL</div>
+              <input type="text" id="doc-tv-url-input" class="form-input" readonly style="font-family:var(--font-mono); font-size:0.8rem; background:white; margin-bottom:0.5rem;">
+              <button id="btn-copy-tv-url" class="btn btn-sm btn-secondary" style="width:100%;">
+                📺 Copy TV Display Link
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clinic Edit Form (Only for THIS doctor's clinic) -->
+        <div style="background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-sm);">
+          <h2 style="font-size: 1.15rem; font-weight:700; margin-bottom: 1.25rem;">Doctor & Clinic Details</h2>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="myclinic-name">Clinic Name</label>
+              <input type="text" id="myclinic-name" class="form-input" readonly style="background:#f8fafc; color:#64748b;" title="Managed by Super Admin">
+              <span class="form-hint">Clinic Name & Endpoint are assigned by Super Admin</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="myclinic-doctor">Doctor Name</label>
+              <input type="text" id="myclinic-doctor" class="form-input">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="myclinic-specialty">Specialty</label>
+              <input type="text" id="myclinic-specialty" class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="myclinic-cabin">Cabin / Room Number</label>
+              <input type="text" id="myclinic-cabin" class="form-input">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="myclinic-phone">Clinic Phone</label>
+              <input type="text" id="myclinic-phone" class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="myclinic-avg-time">Avg Time Per Patient (Minutes)</label>
+              <input type="number" id="myclinic-avg-time" class="form-input" min="2" max="60" value="8">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="myclinic-address">Clinic Physical Address</label>
+            <input type="text" id="myclinic-address" class="form-input">
+          </div>
+
+          <hr style="border:none; border-top: 1px solid var(--color-border); margin: 1.5rem 0;">
+
+          <!-- Telegram Notification Integration -->
+          <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; color:#0284c7;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .39z"/>
+            </svg>
+            <strong style="font-size:0.95rem;">Telegram OTP & Notification Settings</strong>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="myclinic-tgtoken">Telegram Bot Token (Optional)</label>
+              <input type="text" id="myclinic-tgtoken" class="form-input" placeholder="e.g. 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ">
+              <span class="form-hint">Leave blank to use built-in Telegram simulated alert toast</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="myclinic-tgchat">Telegram Chat ID / Channel ID</label>
+              <input type="text" id="myclinic-tgchat" class="form-input" placeholder="e.g. -100123456789 or @YourClinicChannel">
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; margin-top:1.25rem;">
+            <button id="btn-save-myclinic" class="btn btn-primary">
+              💾 Save Clinic Settings
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL: Create / Edit Session -->
+  <div class="modal-backdrop" id="session-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="session-modal-title">
+    <div class="modal-box modal-box-lg" style="max-width: 580px;">
+      <div class="modal-header">
+        <div>
+          <h2 id="session-modal-title" class="modal-title">Create New Session</h2>
+          <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.15rem;">
+            Set duration and customize tokens per hour
+          </p>
+        </div>
+        <button id="session-modal-close" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="sess-input-name">Session Name <span class="required">*</span></label>
+          <input type="text" id="sess-input-name" class="form-input" placeholder="e.g. Afternoon Pediatric Clinic" required>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="sess-input-start">Start Time</label>
+            <input type="time" id="sess-input-start" class="form-input" value="09:00">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sess-input-end">End Time</label>
+            <input type="time" id="sess-input-end" class="form-input" value="12:00">
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="sess-input-duration">Duration (Hours) <span class="required">*</span></label>
+            <input type="number" id="sess-input-duration" class="form-input" min="0.5" max="12" step="0.5" value="3">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sess-input-rate">Default Rate (Tokens/Hr) <span class="required">*</span></label>
+            <input type="number" id="sess-input-rate" class="form-input" min="1" max="25" value="7">
+          </div>
+        </div>
+
+        <!-- Hourly Token Configuration Box -->
+        <div class="hourly-token-config-box" style="margin-top: 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.15rem; background: #f8fafc;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-text-main); display: flex; align-items: center; gap: 0.4rem;">
+                ⏱️ Hourly Token Allocation
+              </div>
+              <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.1rem;">
+                Equally divided by default. Modify individual hours or reset anytime.
+              </div>
+            </div>
+            <button type="button" id="sess-btn-reset-equal" class="btn btn-sm btn-outline" style="font-size: 0.75rem; padding: 0.25rem 0.65rem;">
+              ⚡ Reset to Equal
+            </button>
+          </div>
+
+          <!-- Dynamic Hourly Slots -->
+          <div id="sess-hourly-slots-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <!-- Rendered by doctor.js -->
+          </div>
+
+          <!-- Capacity Calculation Summary -->
+          <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px dashed var(--color-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <span id="sess-distribution-badge" class="badge" style="background:#ccfbf1; color:#0f766e; font-weight:700; font-size:0.75rem; padding:0.25rem 0.6rem; border-radius:var(--radius-sm);">
+              Equal Distribution (Default)
+            </span>
+            <div id="sess-calculated-capacity" style="font-size: 0.95rem; font-weight: 700;">
+              Total Capacity: <strong style="color:var(--color-primary); font-size:1.15rem;" id="sess-total-capacity-val">21</strong> Tokens
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="session-modal-cancel" class="btn btn-secondary">Cancel</button>
+        <button id="session-modal-save" class="btn btn-primary">Save Session</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- MODAL: Doctor Login Dialog (Appears if user not logged in or clicks switch) -->
+  <div class="modal-backdrop" id="doctor-login-modal" role="dialog" aria-modal="true" aria-labelledby="doc-login-title">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <div>
+          <h2 id="doc-login-title" class="modal-title">Doctor Portal Sign In</h2>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.2rem;">Use credentials generated by your Super Admin</p>
+        </div>
+        <button id="doc-login-close" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="doc-login-form" onsubmit="event.preventDefault();">
+          <div class="form-group">
+            <label class="form-label" for="doc-login-user">Doctor Username / Email</label>
+            <input type="text" id="doc-login-user" class="form-input" placeholder="e.g. dr.vance@medipulse.io" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="doc-login-pass">Password / PIN</label>
+            <input type="password" id="doc-login-pass" class="form-input" placeholder="Enter password" required>
+          </div>
+
+          <div style="margin-top: 1rem;">
+            <button type="submit" id="btn-submit-doc-login" class="btn btn-primary" style="width: 100%;">
+              Sign In to Doctor Console
+            </button>
+          </div>
+
+          <!-- Quick Demo Logins for fast evaluation -->
+          <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--color-border-light);">
+            <div style="font-size: 0.75rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:700; margin-bottom: 0.5rem; text-align:center;">
+              1-Click Demo Logins
+            </div>
+            <div style="display:flex; flex-direction:column; gap:0.4rem;">
+              <button type="button" class="btn btn-sm btn-secondary demo-doc-login-btn" data-clinic="clinic_joshi" style="justify-content:space-between; font-size:0.8rem;">
+                <span>🩺 Dr. Rajvi J. Joshi (Joshi Clinic, Surat)</span>
+                <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--color-primary); font-weight:700;">Joshi#2026</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript bootstrap -->
+  <script type="module">
+    import { initDoctorScreen } from '/src/js/doctor.js';
+    document.addEventListener('DOMContentLoaded', initDoctorScreen);
+  </script>
+</body>
+</html>

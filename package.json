@@ -1,0 +1,16 @@
+{
+  "name": "hospital-appointment-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3000 --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node tests/run-all.js"
+  },
+  "devDependencies": {
+    "vite": "^8.3.5"
+  }
+}
