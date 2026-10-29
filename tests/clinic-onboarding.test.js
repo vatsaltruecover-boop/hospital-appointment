@@ -86,9 +86,9 @@ export async function runClinicOnboardingTests() {
     assert(clinic, 'Created clinic must be found by slug');
 
     const urls = clinicStore.getClinicEndpointUrls(clinic, 'http://localhost:3000');
-    assertEqual(urls.patientUrl, 'http://localhost:3000/silver-oak', 'Patient URL must be clean vanity path');
-    assertEqual(urls.tvUrl, 'http://localhost:3000/silver-oak/tv', 'TV URL must be clean vanity path');
-    assertEqual(urls.doctorUrl, 'http://localhost:3000/silver-oak/doctor', 'Doctor URL must be clean vanity path');
+    assertEqual(urls.patientUrl, 'http://localhost:3000/index.html?clinic=silver-oak', 'Patient URL must point to index.html with clinic parameter');
+    assertEqual(urls.tvUrl, 'http://localhost:3000/live-tv.html?clinic=silver-oak', 'TV URL must point to live-tv.html with clinic parameter');
+    assertEqual(urls.doctorUrl, 'http://localhost:3000/doctor.html?clinic=silver-oak', 'Doctor URL must point to doctor.html with clinic parameter');
   });
 
   // Test 6: Default Session Auto-Created on New Clinic
@@ -130,9 +130,9 @@ export async function runClinicOnboardingTests() {
     assertEqual(joshi.doctorCreds.password, 'Joshi#2026', 'Doctor password matches');
 
     const urls = store.getClinicEndpointUrls(joshi);
-    assert(urls.patientUrl.endsWith('/joshi-clinic'), 'Patient endpoint must have joshi-clinic clean slug');
-    assert(urls.tvUrl.endsWith('/joshi-clinic/tv'), 'TV endpoint must have joshi-clinic/tv slug');
-    assert(urls.doctorUrl.endsWith('/joshi-clinic/doctor'), 'Doctor endpoint must have joshi-clinic/doctor slug');
+    assert(urls.patientUrl.includes('clinic=joshi-clinic'), 'Patient endpoint must have joshi-clinic slug');
+    assert(urls.tvUrl.includes('clinic=joshi-clinic'), 'TV endpoint must have joshi-clinic slug');
+    assert(urls.doctorUrl.includes('clinic=joshi-clinic'), 'Doctor endpoint must have joshi-clinic slug');
 
     const activeSession = store.getActiveSession(joshi.id);
     assert(activeSession, 'Joshi clinic must have an active session');

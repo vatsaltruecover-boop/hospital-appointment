@@ -461,13 +461,13 @@ class ClinicStore {
     return {
       slug,
       clinicName: clinic.name,
-      patientUrl: `${base}/${slug}`,
-      tvUrl: `${base}/${slug}/tv`,
-      doctorUrl: `${base}/${slug}/doctor`,
-      adminUrl: `${base}/admin`,
-      patientQueryUrl: `${base}/${slug}`,
-      tvQueryUrl: `${base}/${slug}/tv`,
-      doctorQueryUrl: `${base}/${slug}/doctor`
+      patientUrl: `${base}/index.html?clinic=${slug}`,
+      tvUrl: `${base}/live-tv.html?clinic=${slug}`,
+      doctorUrl: `${base}/doctor.html?clinic=${slug}`,
+      adminUrl: `${base}/admin.html`,
+      patientQueryUrl: `${base}/index.html?clinic=${slug}`,
+      tvQueryUrl: `${base}/live-tv.html?clinic=${slug}`,
+      doctorQueryUrl: `${base}/doctor.html?clinic=${slug}`
     };
   }
 

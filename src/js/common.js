@@ -6,7 +6,21 @@ import { authService } from './auth.js';
 export function resolveClinicFromUrl() {
   if (typeof window === 'undefined') return clinicStore.getCurrentClinic();
 
-  // 1. Check clean path routing first (e.g. /joshi-clinic, /joshi-clinic/tv, /joshi-clinic/doctor)
+  // 1. Check query parameter first (?clinic=joshi-clinic)
+  const urlParams = new URLSearchParams(window.location.search);
+  const clinicParam = urlParams.get('clinic') || urlParams.get('c') || urlParams.get('clinicId');
+
+  if (clinicParam) {
+    const matched = clinicStore.getClinicBySlugOrId(clinicParam);
+    if (matched) {
+      if (clinicStore.state.currentClinicId !== matched.id) {
+        clinicStore.setCurrentClinic(matched.id);
+      }
+      return matched;
+    }
+  }
+
+  // 2. Fallback to clean path routing (e.g. /joshi-clinic, /joshi-clinic/tv, /joshi-clinic/doctor)
   const pathname = window.location.pathname || '';
   const segments = pathname.split('/').filter(p => Boolean(p) && !p.endsWith('.html'));
   if (segments.length > 0) {
@@ -21,20 +35,6 @@ export function resolveClinicFromUrl() {
           return matched;
         }
       }
-    }
-  }
-
-  // 2. Fallback to query parameter (?clinic=joshi-clinic)
-  const urlParams = new URLSearchParams(window.location.search);
-  const clinicParam = urlParams.get('clinic') || urlParams.get('c') || urlParams.get('clinicId');
-
-  if (clinicParam) {
-    const matched = clinicStore.getClinicBySlugOrId(clinicParam);
-    if (matched) {
-      if (clinicStore.state.currentClinicId !== matched.id) {
-        clinicStore.setCurrentClinic(matched.id);
-      }
-      return matched;
     }
   }
 
