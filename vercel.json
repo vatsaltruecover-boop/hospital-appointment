@@ -1,0 +1,14 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/doctor", "destination": "/doctor.html" },
+    { "source": "/tv", "destination": "/live-tv.html" },
+    { "source": "/live-tv", "destination": "/live-tv.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/:clinic/doctor", "destination": "/doctor.html" },
+    { "source": "/:clinic/tv", "destination": "/live-tv.html" },
+    { "source": "/:clinic/live-tv", "destination": "/live-tv.html" },
+    { "source": "/:clinic/admin", "destination": "/admin.html" },
+    { "source": "/:clinic", "destination": "/index.html" }
+  ]
+}
